@@ -77,3 +77,4 @@ project/boot/
 project/plugins/project/
 .history
 .lib/
+/.idea/
