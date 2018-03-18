@@ -1,14 +1,15 @@
 package com.example.hello.api
 
 import akka.util.ByteString
-import akka.{ Done, NotUsed }
+import akka.{Done, NotUsed}
+import com.lightbend.lagom.scaladsl.api.Service.pathCall
 import com.lightbend.lagom.scaladsl.api.broker.Topic
-import com.lightbend.lagom.scaladsl.api.broker.kafka.{ KafkaProperties, PartitionKeyStrategy }
-import com.lightbend.lagom.scaladsl.api.deser.{ DefaultExceptionSerializer, ExceptionSerializer, RawExceptionMessage }
-import com.lightbend.lagom.scaladsl.api.transport.{ MessageProtocol, TransportException }
-import com.lightbend.lagom.scaladsl.api.{ Service, ServiceCall }
-import play.api.{ Environment, Mode }
-import play.api.libs.json.{ Format, Json }
+import com.lightbend.lagom.scaladsl.api.broker.kafka.{KafkaProperties, PartitionKeyStrategy}
+import com.lightbend.lagom.scaladsl.api.deser.{DefaultExceptionSerializer, ExceptionSerializer, RawExceptionMessage}
+import com.lightbend.lagom.scaladsl.api.transport.{MessageProtocol, TransportException}
+import com.lightbend.lagom.scaladsl.api.{Service, ServiceCall}
+import play.api.{Environment, Mode}
+import play.api.libs.json.{Format, Json}
 
 import scala.collection.immutable.Seq
 import scala.util.control.NoStackTrace
@@ -18,13 +19,16 @@ trait ExceptionExamplesService extends Service {
 
   def hello(id: String): ServiceCall[NotUsed, String]
 
+  def leaky(id: String): ServiceCall[NotUsed, String]
+
   override final def descriptor = {
     import Service._
     named("exception-examples")
       .withCalls(
-        pathCall("/api/hello/:id", hello _)
+        pathCall("/api/hello/:id", hello _),
+        pathCall("/api/leaky/:id", leaky _)
       )
-      .withExceptionSerializer(new CustomExceptionSerializer())
+      //.withExceptionSerializer(new CustomExceptionSerializer())
       .withAutoAcl(true)
   }
 }
