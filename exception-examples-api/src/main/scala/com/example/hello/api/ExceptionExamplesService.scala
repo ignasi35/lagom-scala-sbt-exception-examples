@@ -19,14 +19,14 @@ trait ExceptionExamplesService extends Service {
 
   def hello(id: String): ServiceCall[NotUsed, String]
 
-  def leaky(id: String): ServiceCall[NotUsed, String]
+  def leaky: ServiceCall[NotUsed, String]
 
   override final def descriptor = {
     import Service._
     named("exception-examples")
       .withCalls(
         pathCall("/api/hello/:id", hello _),
-        pathCall("/api/leaky/:id", leaky _)
+        pathCall("/api/leaky", leaky _)
       )
       //.withExceptionSerializer(new CustomExceptionSerializer())
       .withAutoAcl(true)
